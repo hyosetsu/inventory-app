@@ -6,7 +6,8 @@ WORKDIR /app
 
 # 依存関係をコピーしてインストール
 COPY package*.json ./
-RUN npm install
+RUN npm install -D tailwindcss postcss autoprefixer && \
+    npm install react-hot-toast
 
 # アプリ本体をコピー
 COPY . .

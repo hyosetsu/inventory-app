@@ -2,6 +2,8 @@ from rest_framework import serializers
 from .models import Item
 
 class ItemSerializer(serializers.ModelSerializer):
+    owner = serializers.ReadOnlyField(source='owner.username')
+
     class Meta:
         model = Item
-        fields = '__all__'
+        fields = ["id", "name", "category", "description", "image", "created_at", "owner"]
