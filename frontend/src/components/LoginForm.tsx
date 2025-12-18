@@ -2,49 +2,49 @@ import { useState } from "react";
 import api from "../api";
 import toast from "react-hot-toast";
 
-const LoginForm = ({ onLogin }: { onLogin: () => void }) => {
+interface LoginFormProps {
+  onLogin: () => void; // ← 型を明示！
+}
+
+const LoginForm: React.FC<LoginFormProps> = ({ onLogin }) => {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const handleLogin = async (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const res = await api.post("/token/", { username, password });
       localStorage.setItem("access", res.data.access);
       localStorage.setItem("refresh", res.data.refresh);
-      toast.success("ログイン成功🎉");
-      onLogin();
-    } catch {
-      toast.error("ログイン失敗💦 ユーザー名またはパスワードを確認してください。");
+      toast.success("ログイン成功！");
+      onLogin(); // ← 型OK
+    } catch (error) {
+      toast.error("ログイン失敗！");
     }
   };
 
   return (
     <form
-      onSubmit={handleLogin}
-      className="max-w-sm mx-auto bg-white p-6 rounded-2xl shadow-lg mt-10 space-y-4"
+      onSubmit={handleSubmit}
+      className="max-w-sm mx-auto p-6 bg-white rounded-2xl shadow-md"
     >
-      <h2 className="text-xl font-bold text-center text-gray-700">🔐 ログイン</h2>
-
+      <h2 className="text-xl font-semibold mb-4 text-center">ログイン</h2>
       <input
-        type="text"
+        className="w-full border p-2 mb-3 rounded"
         placeholder="ユーザー名"
         value={username}
         onChange={(e) => setUsername(e.target.value)}
-        className="w-full border border-gray-300 rounded-lg p-2"
       />
-
       <input
+        className="w-full border p-2 mb-4 rounded"
         type="password"
         placeholder="パスワード"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        className="w-full border border-gray-300 rounded-lg p-2"
       />
-
       <button
         type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded-lg hover:bg-blue-700"
+        className="w-full bg-green-500 hover:bg-green-600 text-white py-2 rounded-md"
       >
         ログイン
       </button>
