@@ -14,15 +14,18 @@ services:
     environment:
       - DJANGO_SETTINGS_MODULE=core.settings
 
-  # frontend:
-  #   build: ./frontend
-  #   container_name: inventory-frontend
-  #   ports:
-  #     - "3000:3000"
-  #   volumes:
-  #     - ./frontend:/app
-  #   depends_on:
-  #     - backend
+  frontend:
+    build: ./frontend
+    container_name: inventory-frontend
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    working_dir: /app
+    command: ["npm", "run", "dev", "--", "--host"]
+    depends_on:
+      - backend
 
   db:
     image: postgres:15
